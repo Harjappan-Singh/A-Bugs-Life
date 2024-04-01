@@ -1,0 +1,3 @@
+/Users/harjappansingh/Documents/College/Sophomore/Sem 2/C++/Bug_Life_Project/cmake-build-debug/CMakeFiles/Bug_Life_Project.dir
+/Users/harjappansingh/Documents/College/Sophomore/Sem 2/C++/Bug_Life_Project/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/harjappansingh/Documents/College/Sophomore/Sem 2/C++/Bug_Life_Project/cmake-build-debug/CMakeFiles/rebuild_cache.dir
