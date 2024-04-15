@@ -5,4 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(Bug_Life_Project main.cpp
         Bug.cpp
-        Bug.h)
+        Bug.h
+        Crawler.cpp
+        Crawler.h)

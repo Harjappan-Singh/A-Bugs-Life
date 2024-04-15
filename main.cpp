@@ -15,21 +15,6 @@ protected:
 };
 
 
-class Crawler: public Bug{
-public:
-    void move(){
-
-    }
-};
-
-class Hopper: public Bug{
-    int hopLength;
-public:
-    void move(){
-
-    }
-};
-
 int main() {
     std::cout << "Hello, World!" << std::endl;
     return 0;
