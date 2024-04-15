@@ -2,6 +2,10 @@
 // Created by Harjappan Singh on 02/04/24.
 //
 
+
+
+#ifndef BUG_LIFE_PROJECT_BUG_H
+#define BUG_LIFE_PROJECT_BUG_H
 #include <iostream>
 #include <utility>
 #include <list>
@@ -14,22 +18,18 @@ enum direction {
     West = 4
 };
 
-#ifndef BUG_LIFE_PROJECT_BUG_H
-#define BUG_LIFE_PROJECT_BUG_H
-
-
 class Bug {
 protected:
     int id;
     pair<int,int> position;
-    direction direction;
+    enum direction direction;
     int size;
     bool alive;
     list<pair<int,int>> path;
 
 public:
     Bug();
-    Bug(int id, pair<int,int> position, enum direction, int size, bool alive, list<pair<int,int>> path);
+    Bug(int id, pair<int,int> position, enum direction direction, int size, bool alive, list<pair<int,int>> path);
     pair<int,int> getPosition() const;
     enum direction getDirection() const;
     int getSize() const;

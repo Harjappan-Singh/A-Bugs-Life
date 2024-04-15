@@ -8,7 +8,7 @@ Bug::Bug(){
 
 }
 
-Bug::Bug(int id, pair<int, int> position, enum direction, int size, bool alive, list<pair<int, int>> path) {
+Bug::Bug(int id, pair<int, int> position, enum direction direction, int size, bool alive, list<pair<int, int>> path) {
     this->id = id;
     this->position = position;
     this->direction = direction;
