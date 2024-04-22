@@ -54,6 +54,8 @@ public:
 
     bool isWayBlocked() const;
 
+    virtual void displayBug()=0;
+
     virtual ~Bug();
 
 };

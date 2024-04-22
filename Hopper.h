@@ -19,6 +19,8 @@ public:
 
     void move() override;
 
+    void displayBug() override;
+
     ~Hopper();
 };
 

@@ -43,6 +43,10 @@ void Crawler::move(){
     }
 }
 
+void Crawler::displayBug() {
+    std::cout << "Crawler " << getId() << " at (" << getPosition().first << "," << getPosition().second << ") facing " << getDirection() << " size " << getSize() << " alive " << isAlive() << std::endl;
+}
+
 Crawler::~Crawler() {
 
 }

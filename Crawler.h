@@ -13,6 +13,7 @@ public:
     Crawler();
     Crawler(int id, pair<int, int> position, Direction direction, int size, bool alive);
     void move() override;
+    void displayBug() override;
     ~Crawler();
 };
 

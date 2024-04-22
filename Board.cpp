@@ -151,6 +151,10 @@ void Board::displayAllBugs() const {
     }
 }
 
+bool Board::isBugVectorEmpty() const{
+    return bug_vector.empty();
+}
+
 Board::~Board() {
     for (auto & i : bug_vector) {
         delete i;

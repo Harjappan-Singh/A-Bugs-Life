@@ -22,6 +22,7 @@ public:
     void createHopperBug(int bugId, int bugX, int bugY, int direction, int size, int hopLength);
     void createCrawlerBug(int bugId, int bugX, int bugY, int direction, int size);
     void displayAllBugs() const;
+    bool isBugVectorEmpty() const;
     ~Board();
 };
 
