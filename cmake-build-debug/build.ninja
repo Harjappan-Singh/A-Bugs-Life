@@ -67,6 +67,12 @@ build CMakeFiles/Bug_Life_Project.dir/Crawler.cpp.o: CXX_COMPILER__Bug_Life_Proj
   OBJECT_DIR = CMakeFiles/Bug_Life_Project.dir
   OBJECT_FILE_DIR = CMakeFiles/Bug_Life_Project.dir
 
+build CMakeFiles/Bug_Life_Project.dir/Hopper.cpp.o: CXX_COMPILER__Bug_Life_Project_unscanned_Debug /Users/harjappansingh/Documents/College/Sophomore/Sem$ 2/C++/Bug_Life_Project/Hopper.cpp || cmake_object_order_depends_target_Bug_Life_Project
+  DEP_FILE = CMakeFiles/Bug_Life_Project.dir/Hopper.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/Bug_Life_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles/Bug_Life_Project.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Bug_Life_Project
@@ -75,7 +81,7 @@ build CMakeFiles/Bug_Life_Project.dir/Crawler.cpp.o: CXX_COMPILER__Bug_Life_Proj
 #############################################
 # Link the executable Bug_Life_Project
 
-build Bug_Life_Project: CXX_EXECUTABLE_LINKER__Bug_Life_Project_Debug CMakeFiles/Bug_Life_Project.dir/main.cpp.o CMakeFiles/Bug_Life_Project.dir/Bug.cpp.o CMakeFiles/Bug_Life_Project.dir/Crawler.cpp.o
+build Bug_Life_Project: CXX_EXECUTABLE_LINKER__Bug_Life_Project_Debug CMakeFiles/Bug_Life_Project.dir/main.cpp.o CMakeFiles/Bug_Life_Project.dir/Bug.cpp.o CMakeFiles/Bug_Life_Project.dir/Crawler.cpp.o CMakeFiles/Bug_Life_Project.dir/Hopper.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk
   OBJECT_DIR = CMakeFiles/Bug_Life_Project.dir
   POST_BUILD = :
