@@ -60,7 +60,7 @@ public:
 
     bool isWayBlocked() const;
 
-    ~Bug();
+    virtual ~Bug();
 
 };
 

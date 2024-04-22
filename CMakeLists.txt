@@ -9,4 +9,6 @@ add_executable(Bug_Life_Project main.cpp
         Crawler.cpp
         Crawler.h
         Hopper.cpp
-        Hopper.h)
+        Hopper.h
+        Board.cpp
+        Board.h)
