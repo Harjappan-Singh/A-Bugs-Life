@@ -5,28 +5,67 @@
 #include "Bug.h"
 
 Bug::Bug(){
-
+    this->id = 0;
+    this->position = make_pair(0,0);
+    this->direction = North;
+    this->size = 0;
+    this->alive = false;
 }
 
-Bug::Bug(int id, pair<int, int> position, enum direction direction, int size, bool alive, list<pair<int, int>> path) {
+Bug::Bug(int id, pair<int, int> position, enum direction direction, int size, bool alive) {
     this->id = id;
     this->position = position;
     this->direction = direction;
     this->size = size;
     this->alive = alive;
-    this->path = path;
 }
 
-pair<int, int> Bug::getPosition() const{
-    return this->position;
+int Bug::getId() const {
+    return id;
+}
+
+void Bug::setId(int i) {
+    Bug::id = i;
+}
+
+const pair<int, int> &Bug::getPosition() const {
+    return position;
+}
+
+void Bug::setPosition(const pair<int, int> &ps) {
+    Bug::position = ps;
 }
 
 enum direction Bug::getDirection() const {
-    return this->direction;
+    return direction;
+}
+
+void Bug::setDirection(enum direction d) {
+    Bug::direction = d;
 }
 
 int Bug::getSize() const {
-    return this->size;
+    return size;
+}
+
+void Bug::setSize(int s) {
+    Bug::size = s;
+}
+
+bool Bug::isAlive() const {
+    return alive;
+}
+
+void Bug::setAlive(bool a) {
+    Bug::alive = a;
+}
+
+const list<pair<int, int>> & Bug::getPath() const {
+    return path;
+}
+
+void Bug::setPath(const list<pair<int, int>> &p) {
+    Bug::path = p;
 }
 
 bool Bug::isWayBlocked() const{
@@ -43,4 +82,8 @@ bool Bug::isWayBlocked() const{
         result = false;
     }
     return result;
+}
+
+Bug::~Bug() {
+    cout << "Bug destructor has been called" << endl;
 }

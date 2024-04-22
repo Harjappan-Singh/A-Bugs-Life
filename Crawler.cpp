@@ -5,53 +5,44 @@
 #include <ctime>
 #include "Crawler.h"
 
+Crawler::Crawler() : Bug() {
 
-Crawler::Crawler(int id, pair<int, int> position, enum direction direction, int size, bool alive) {
-    this->id = id;
-    this->position = position;
-    this->direction = direction;
-    this->size = size;
-    this->alive = alive;
 }
+
+Crawler::Crawler(int id, pair<int, int> position, enum direction direction, int size, bool alive) : Bug(id, position, direction, size, alive) {
+}
+
 
 void Crawler::move(){
-//    if bug pointing at a direction which is blocked
-// then generate a random direction and set that direction to the current direction of bug
+    pair<int, int> currentPosition = getPosition();
+    enum direction currentDirection = getDirection();
+    list<std::pair<int, int>> currentPath = getPath();
 
-// so if the bug is pointing to
-// assume that bug is at (5,4)
-// North -> move the bug towards north so decrease the y part by one (5,3)
-// East -> move the bug towards east so increase the x part by one (6,  4)
-// South -> move the bug towards south so increase the y part by one (5,5)
-// West -> move the bug towards west so decrease the x part by one (3,4)
-
-    srand(time(0));
-    enum direction newDirection;
- while(this->isWayBlocked()){
-     int randomNum =  rand() % 4+1;
-     if(randomNum == 1){
-         newDirection = North;
-     } else if (randomNum == 2){
-         newDirection = East;
-     }else if (randomNum == 3){
-         newDirection = South;
-     }else if (randomNum == 4){
-         newDirection = West;
-     }
-      this->direction = newDirection;
- }
-
-    if(this->direction == North){
-        this->position.second-= 1;
-    } else if(this->direction == East){
-        this->position.first+= 1;
-    } else if (this->direction == South){
-        this->position.second+= 1;
-    } else if (this->direction == West){
-        this->position.first-= 1;
+    if (!isWayBlocked()) {
+        switch (currentDirection) {
+            case North:
+                currentPosition.second -= 1;
+                break;
+            case South:
+                currentPosition.second += 1;
+                break;
+            case East:
+                currentPosition.first += 1;
+                break;
+            case West:
+                currentPosition.first -= 1;
+                break;
+        }
+        setPosition(currentPosition);
+        currentPath.push_back(currentPosition);
+        setPath(currentPath);
+    } else {
+        int newDirection = rand() % 4 + 1;
+        setDirection((enum direction) newDirection);
+        move();
     }
-
-    this->path.push_back(this->position);
 }
 
-//;put srand in main
+Crawler::~Crawler() {
+
+}

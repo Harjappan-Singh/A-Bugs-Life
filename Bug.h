@@ -11,32 +11,57 @@
 #include <list>
 using namespace std;
 
-enum direction {
-    North = 1,
-    East = 2,
-    South = 3,
-    West = 4
-};
-
 class Bug {
 protected:
     int id;
     pair<int,int> position;
-    enum direction direction;
+    enum direction {
+        North = 1,
+        East = 2,
+        South = 3,
+        West = 4
+    } direction;
     int size;
     bool alive;
     list<pair<int,int>> path;
 
 public:
     Bug();
-    Bug(int id, pair<int,int> position, enum direction direction, int size, bool alive, list<pair<int,int>> path);
-    pair<int,int> getPosition() const;
+
+    Bug(int id, pair<int,int> position, enum direction direction, int size, bool alive);
+
+    int getId() const;
+
+    void setId(int id);
+
+    const pair<int, int>& getPosition() const;
+
+    void setPosition(const pair<int, int>& position);
+
     enum direction getDirection() const;
+
+    void setDirection(enum direction direction);
+
+    void setDirection(int direction);
+
     int getSize() const;
+
+    void setSize(int size);
+
+    bool isAlive() const;
+
+    void setAlive(bool alive);
+
+    const list<pair<int, int>>& getPath() const;
+
+    void setPath(const list<pair<int, int>>& path);
+
     virtual void move() = 0;
+
     bool isWayBlocked() const;
 
-};
+    ~Bug();
 
+};
 
 #endif //BUG_LIFE_PROJECT_BUG_H

@@ -10,8 +10,10 @@
 
 class Crawler: public Bug{
 public:
+    Crawler();
     Crawler(int id, pair<int, int> position, enum direction direction, int size, bool alive);
     void move() override;
+    ~Crawler();
 };
 
 
