@@ -9,13 +9,13 @@ Crawler::Crawler() : Bug() {
 
 }
 
-Crawler::Crawler(int id, pair<int, int> position, enum direction direction, int size, bool alive) : Bug(id, position, direction, size, alive) {
+Crawler::Crawler(int id, pair<int, int> position, Direction direction, int size, bool alive) : Bug(id, position, direction, size, alive) {
 }
 
 
 void Crawler::move(){
     pair<int, int> currentPosition = getPosition();
-    enum direction currentDirection = getDirection();
+    Direction currentDirection = getDirection();
     list<std::pair<int, int>> currentPath = getPath();
 
     if (!isWayBlocked()) {
@@ -38,7 +38,7 @@ void Crawler::move(){
         setPath(currentPath);
     } else {
         int newDirection = rand() % 4 + 1;
-        setDirection((enum direction) newDirection);
+        setDirection((Direction) newDirection);
         move();
     }
 }

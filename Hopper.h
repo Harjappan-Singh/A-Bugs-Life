@@ -11,7 +11,7 @@ private:
     int hopLength;
 public:
     Hopper();
-    Hopper(int id, pair<int, int> position, enum  direction direction, int size, bool alive, int hopLength);
+    Hopper(int id, pair<int, int> position, Direction direction, int size, bool alive, int hopLength);
 
     int getHopLength() const;
 

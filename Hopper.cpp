@@ -7,7 +7,7 @@ Hopper::Hopper() {
     hopLength = 0;
 }
 
-Hopper::Hopper(int id, pair<int, int> position, enum direction direction, int size, bool alive, int hopLength) : Bug(id, position, direction, size, alive) {
+Hopper::Hopper(int id, pair<int, int> position, Direction direction, int size, bool alive, int hopLength) : Bug(id, position, direction, size, alive) {
     this->hopLength = hopLength;
 }
 
@@ -23,10 +23,10 @@ void Hopper::setHopLength(int h) {
 void Hopper::move() {
     while (isWayBlocked()) {
         int newDirection = rand() % 4 + 1;
-        setDirection((enum direction) newDirection);
+        setDirection((Direction) newDirection);
     }
     pair<int, int> currentPosition = getPosition();
-    enum direction currentDirection = getDirection();
+    Direction currentDirection = getDirection();
     list<pair<int, int>> currentPath = getPath();
 
     int maxHopDistance = 0;

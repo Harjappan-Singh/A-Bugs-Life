@@ -7,8 +7,8 @@
 
 #include "Bug.h"
 #include <vector>
-
-class Board: public Bug{
+#include "Direction.h"
+class Board{
     static const int BOARD_SIZE = 10;
 
     vector<Bug*> bug_vector;
@@ -17,12 +17,11 @@ class Board: public Bug{
 
 public:
     Board();
-
     void initialiseBoard(const string& filename);
     bool isValidBugData(const string& bugType, const string& bugIdStr, const string& bugXStr, const string& bugYStr, const string& directionStr, const string& sizeStr, const string& hopLengthStr) const;
-
     void createHopperBug(int bugId, int bugX, int bugY, int direction, int size, int hopLength);
     void createCrawlerBug(int bugId, int bugX, int bugY, int direction, int size);
+    void displayAllBugs() const;
     ~Board();
 };
 

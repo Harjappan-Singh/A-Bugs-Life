@@ -6,6 +6,7 @@
 #include "Hopper.h"
 #include "Crawler.h"
 #include "Bug.h"
+#include "Direction.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -39,6 +40,9 @@ void Board::initialiseBoard(const string& filename) {
         getline(lineStream, directionStr, ';');
         getline(lineStream, sizeStr, ';');
         getline(lineStream, hopLengthStr, ';');
+        if (bugType == "H") {
+            getline(lineStream, hopLengthStr, ';');
+        }
 
         if (!isValidBugData(bugType, bugIdStr, bugXStr, bugYStr, directionStr, sizeStr, hopLengthStr)) {
             cout << "Error: Invalid bug data" << endl;
@@ -50,9 +54,10 @@ void Board::initialiseBoard(const string& filename) {
         int bugY = stoi(bugYStr);
         int direction = stoi(directionStr);
         int size = stoi(sizeStr);
-        int hopLength = stoi(hopLengthStr);
+        int hopLength = 0;
 
         if (bugType == "H") {
+            hopLength = stoi(hopLengthStr);
             createHopperBug(bugId, bugX, bugY, direction, size, hopLength);
         } else {
             createCrawlerBug(bugId, bugX, bugY, direction, size);
@@ -95,13 +100,55 @@ bool Board::isValidBugData(const string& bugType, const string& bugIdStr, const 
 }
 
 void Board::createHopperBug(int bugId, int bugX, int bugY, int direction, int size, int hopLength) {
-    Hopper* hopper = new Hopper(bugId, make_pair(bugX, bugY), static_cast<enum direction>(direction), size, true, hopLength);
+    Hopper* hopper = new Hopper(bugId, make_pair(bugX, bugY), static_cast<Direction>(direction), size, true, hopLength);
     bug_vector.push_back(hopper);
 }
 
 void Board::createCrawlerBug(int bugId, int bugX, int bugY, int direction, int size) {
-    Crawler* crawler = new Crawler(bugId, make_pair(bugX, bugY), static_cast<enum direction>(direction), size, true);
+    Crawler* crawler = new Crawler(bugId, make_pair(bugX, bugY), static_cast<Direction>(direction), size, true);
     bug_vector.push_back(crawler);
+}
+
+void Board::displayAllBugs() const {
+    for (const auto& bug : bug_vector) {
+        cout << bug->getId() << " ";
+        if (dynamic_cast<Crawler*>(bug)) {
+            cout << "Crawler ";
+        } else {
+            cout << "Hopper ";
+        }
+        cout << "(" << bug->getPosition().first << "," << bug->getPosition().second << ") ";
+        cout << bug->getSize() << " ";
+
+        switch (bug->getDirection()) {
+            case Direction::North:
+                cout << "North ";
+                break;
+            case Direction::East:
+                cout << "East ";
+                break;
+            case Direction::South:
+                cout << "South ";
+                break;
+            case Direction::West:
+                cout << "West ";
+                break;
+        }
+
+        if (dynamic_cast<Hopper*>(bug)) {
+            cout << dynamic_cast<Hopper*>(bug)->getHopLength() << " ";
+        } else {
+            cout << "- ";
+        }
+
+        if (bug->isAlive()) {
+            cout << "Alive";
+        } else {
+            cout << "Dead";
+        }
+
+        cout << endl;
+    }
 }
 
 Board::~Board() {
