@@ -9,18 +9,14 @@
 #include <iostream>
 #include <utility>
 #include <list>
+#include "Direction.h"
 using namespace std;
 
 class Bug {
 protected:
     int id;
     pair<int,int> position;
-    enum direction {
-        North = 1,
-        East = 2,
-        South = 3,
-        West = 4
-    } direction;
+    Direction direction;
     int size;
     bool alive;
     list<pair<int,int>> path;
@@ -28,7 +24,7 @@ protected:
 public:
     Bug();
 
-    Bug(int id, pair<int,int> position, enum direction direction, int size, bool alive);
+    Bug(int id, pair<int,int> position,Direction direction, int size, bool alive);
 
     int getId() const;
 
@@ -38,11 +34,9 @@ public:
 
     void setPosition(const pair<int, int>& position);
 
-    enum direction getDirection() const;
+    Direction getDirection() const;
 
-    void setDirection(enum direction direction);
-
-    void setDirection(int direction);
+    void setDirection(Direction direction);
 
     int getSize() const;
 

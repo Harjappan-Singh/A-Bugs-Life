@@ -6,6 +6,7 @@
 #include "Hopper.h"
 #include "Crawler.h"
 #include "Bug.h"
+#include "Direction.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -95,12 +96,12 @@ bool Board::isValidBugData(const string& bugType, const string& bugIdStr, const 
 }
 
 void Board::createHopperBug(int bugId, int bugX, int bugY, int direction, int size, int hopLength) {
-    Hopper* hopper = new Hopper(bugId, make_pair(bugX, bugY), static_cast<enum direction>(direction), size, true, hopLength);
+    Hopper* hopper = new Hopper(bugId, make_pair(bugX, bugY), static_cast<Direction>(direction), size, true, hopLength);
     bug_vector.push_back(hopper);
 }
 
 void Board::createCrawlerBug(int bugId, int bugX, int bugY, int direction, int size) {
-    Crawler* crawler = new Crawler(bugId, make_pair(bugX, bugY), static_cast<enum direction>(direction), size, true);
+    Crawler* crawler = new Crawler(bugId, make_pair(bugX, bugY), static_cast<Direction>(direction), size, true);
     bug_vector.push_back(crawler);
 }
 

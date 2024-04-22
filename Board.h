@@ -7,8 +7,8 @@
 
 #include "Bug.h"
 #include <vector>
-
-class Board: public Bug{
+#include "Direction.h"
+class Board{
     static const int BOARD_SIZE = 10;
 
     vector<Bug*> bug_vector;

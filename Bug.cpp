@@ -3,16 +3,17 @@
 //
 
 #include "Bug.h"
+#include "Direction.h"
 
 Bug::Bug(){
     this->id = 0;
     this->position = make_pair(0,0);
-    this->direction = North;
+    this->direction = Direction::North;
     this->size = 0;
     this->alive = false;
 }
 
-Bug::Bug(int id, pair<int, int> position, enum direction direction, int size, bool alive) {
+Bug::Bug(int id, pair<int, int> position, Direction direction, int size, bool alive) {
     this->id = id;
     this->position = position;
     this->direction = direction;
@@ -36,11 +37,11 @@ void Bug::setPosition(const pair<int, int> &ps) {
     Bug::position = ps;
 }
 
-enum direction Bug::getDirection() const {
+Direction Bug::getDirection() const {
     return direction;
 }
 
-void Bug::setDirection(enum direction d) {
+void Bug::setDirection(Direction d) {
     Bug::direction = d;
 }
 
@@ -70,13 +71,13 @@ void Bug::setPath(const list<pair<int, int>> &p) {
 
 bool Bug::isWayBlocked() const{
     bool result;
-    if(direction == North){
+    if(this->direction == Direction::North){
         result = this->position.second == 0;
-    } else if(direction == East){
+    } else if(this->direction == Direction::East){
         result = this->position.first == 9;
-    } else if(direction == South){
+    } else if(this->direction == Direction::South){
         result = this->position.second == 9;
-    } else if(direction == West){
+    } else if(this->direction == Direction::West){
         result = this->position.first == 0;
     } else{
         result = false;

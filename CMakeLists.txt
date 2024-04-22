@@ -11,4 +11,6 @@ add_executable(Bug_Life_Project main.cpp
         Hopper.cpp
         Hopper.h
         Board.cpp
-        Board.h)
+        Board.h
+        Direction.cpp
+        Direction.h)
