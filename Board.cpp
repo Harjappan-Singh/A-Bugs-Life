@@ -7,6 +7,7 @@
 #include "Crawler.h"
 #include "Bug.h"
 #include "Direction.h"
+#include "InputValidator.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -153,6 +154,17 @@ void Board::displayAllBugs() const {
 
 bool Board::isBugVectorEmpty() const{
     return bug_vector.empty();
+}
+
+void Board::findBugById() const {
+    int bugId = InputValidator::readInt("Enter bug id: ");
+    for (Bug* bug : bug_vector) {
+        if (bug->getId() == bugId) {
+            bug->displayBug();
+            return;
+        }
+    }
+    cout << "Bug " << bugId << " not found" << endl;
 }
 
 Board::~Board() {

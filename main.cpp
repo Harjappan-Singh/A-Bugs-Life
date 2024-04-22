@@ -2,19 +2,19 @@
 #include <list>
 #include <string>
 #include "Board.h"
+#include "InputValidator.h"
 using namespace std;
 
 void printMenu();
-int readInt(const string& message);
-string readString(const string& message);
+
 
 int main() {
     Board board;
-//    string filename = readString("Enter the name of the file to read the bug data from: ");
+    string filename = InputValidator::readString("Enter the name of the file to read the bug data from: ");
     board.initialiseBoard("/Users/harjappansingh/Documents/College/Sophomore/Sem 2/C++/Bug_Life_Project/bugs.txt");
     while(true){
         printMenu();
-        int choice = readInt("Please enter your choice: ");
+        int choice = InputValidator::readInt("Please enter your choice: ");
         switch(choice){
             case 1:
                 cout << "Displaying all the bugs on the board" << endl;
@@ -26,6 +26,7 @@ int main() {
                 break;
             case 2:
                 cout << "Finding a bug by id" << endl;
+                board.findBugById();
                 break;
             case 3:
                 cout << "Tapping the bug board" << endl;
@@ -57,35 +58,4 @@ void printMenu() {
     cout << "4. Display the life history of all the bugs" << endl;
     cout << "5. Exit" << endl;
     cout << "6. Display all cells" << endl;
-}
-
-int readInt(const string& message) {
-    int input;
-    while (true) {
-        cout << message;
-        string line;
-        if (!getline(cin, line)) {
-            cerr << "Error: failed to read input\n";
-            exit(1);
-        }
-        try {
-            input = stoi(line);
-            break;
-        } catch (invalid_argument& e) {
-            cout << "Invalid input, please enter an integer.\n";
-        } catch (out_of_range& e) {
-            cout << "Input out of range, please enter an integer.\n";
-        }
-    }
-    return input;
-}
-
-string readString(const string& message) {
-    cout << message;
-    string line;
-    if (!getline(cin, line)) {
-        cerr << "Error: failed to read input\n";
-        exit(1);
-    }
-    return line;
 }

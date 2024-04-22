@@ -23,6 +23,7 @@ public:
     void createCrawlerBug(int bugId, int bugX, int bugY, int direction, int size);
     void displayAllBugs() const;
     bool isBugVectorEmpty() const;
+    void findBugById() const;
     ~Board();
 };
 

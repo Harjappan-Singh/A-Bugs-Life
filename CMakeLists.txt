@@ -13,4 +13,6 @@ add_executable(Bug_Life_Project main.cpp
         Board.cpp
         Board.h
         Direction.cpp
-        Direction.h)
+        Direction.h
+        InputValidator.cpp
+        InputValidator.h)
