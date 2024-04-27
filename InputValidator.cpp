@@ -46,6 +46,8 @@ namespace InputValidator {
         tm time_info = *localtime(&now);
         ostringstream oss;
         oss << put_time(&time_info, "%Y-%m-%d %H:%M:%S");
-        return oss.str();
+        string str = oss.str();
+        replace(str.begin(), str.end(), ':', '_');
+        return str;
     }
 }

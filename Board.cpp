@@ -192,6 +192,26 @@ void Board::displayLifeHistoryOfAllBugs(ostream& out) const {
     }
 }
 
+void Board::writeLifeHistoryOfAllBugsToFile() const {
+    filesystem::path dir_path = "/Users/harjappansingh/Documents/College/Sophomore/Sem 2/C++/Bug_Life_Project/";
+
+    string file_name = "bugs_life_history_" + InputValidator::getCurrentDateTime() + ".out";
+    replace(file_name.begin(), file_name.end(), ':', '_');
+    filesystem::path file_path = dir_path / file_name;
+
+    ofstream file(file_path);
+    if (!file.is_open()) {
+        throw runtime_error("Unable to open file for writing.");
+    }
+
+    displayLifeHistoryOfAllBugs(file);
+    if (!file.good()) {
+        throw runtime_error("Error writing to file.");
+    }
+
+    file.close();
+}
+
 Board::~Board() {
     for (auto & i : bug_vector) {
         delete i;
