@@ -167,6 +167,12 @@ void Board::findBugById() const {
     cout << "Bug " << bugId << " not found" << endl;
 }
 
+void Board::tapBoard() {
+    for (Bug* bug : bug_vector) {
+        bug->move();
+    }
+}
+
 Board::~Board() {
     for (auto & i : bug_vector) {
         delete i;

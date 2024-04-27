@@ -24,6 +24,7 @@ public:
     void displayAllBugs() const;
     bool isBugVectorEmpty() const;
     void findBugById() const;
+    void tapBoard();
     ~Board();
 };
 
