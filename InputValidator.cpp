@@ -6,6 +6,9 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 
 namespace InputValidator {
     int readInt(const string& message) {
@@ -36,5 +39,13 @@ namespace InputValidator {
             exit(1);
         }
         return line;
+    }
+
+    string getCurrentDateTime() {
+        time_t now = time(nullptr);
+        tm time_info = *localtime(&now);
+        ostringstream oss;
+        oss << put_time(&time_info, "%Y-%m-%d %H:%M:%S");
+        return oss.str();
     }
 }

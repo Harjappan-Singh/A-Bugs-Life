@@ -25,6 +25,7 @@ public:
     bool isBugVectorEmpty() const;
     void findBugById() const;
     void tapBoard();
+    void displayLifeHistoryOfAllBugs(ostream& out = cout) const;
     ~Board();
 };
 

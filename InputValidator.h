@@ -11,6 +11,7 @@ using namespace std;
 namespace InputValidator {
     int readInt(const string& message);
     string readString(const string& message);
+    string getCurrentDateTime();
 }
 
 

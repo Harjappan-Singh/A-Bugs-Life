@@ -173,6 +173,25 @@ void Board::tapBoard() {
     }
 }
 
+void Board::displayLifeHistoryOfAllBugs(ostream& out) const {
+    for (Bug* bug : bug_vector) {
+        out << bug->getId() << " ";
+        if (dynamic_cast<Crawler*>(bug)) {
+            out << "Crawler";
+        } else if (dynamic_cast<Hopper*>(bug)) {
+            out << "Hopper";
+        }
+        out << " Path: ";
+        for (auto const& pos : bug->getPath()) {
+            out << "(" << pos.first << "," << pos.second << ")";
+            if (&pos != &bug->getPath().back()) {
+                out << ",";
+            }
+        }
+        out << endl;
+    }
+}
+
 Board::~Board() {
     for (auto & i : bug_vector) {
         delete i;
