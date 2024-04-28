@@ -13,32 +13,31 @@ Crawler::Crawler(int id, pair<int, int> position, Direction direction, int size,
 
 
 void Crawler::move(){
+    while (isWayBlocked()) {
+        int newDirection = rand() % 4 + 1;
+        setDirection((Direction) newDirection);
+    }
+
     pair<int, int> currentPosition = getPosition();
     Direction currentDirection = getDirection();
     list<pair<int, int>> currentPath = getPath();
 
-    if (!isWayBlocked()) {
-        switch (currentDirection) {
-            case North:
-                currentPosition.second -= 1;
-                break;
-            case South:
-                currentPosition.second += 1;
-                break;
-            case East:
-                currentPosition.first += 1;
-                break;
-            case West:
-                currentPosition.first -= 1;
-                break;
-        }
-        setPosition(currentPosition);
-        addPath(currentPosition);
-    } else {
-        int newDirection = rand() % 4 + 1;
-        setDirection((Direction) newDirection);
-        move();
+    switch (currentDirection) {
+        case North:
+            currentPosition.second -= 1;
+            break;
+        case South:
+            currentPosition.second += 1;
+            break;
+        case East:
+            currentPosition.first += 1;
+            break;
+        case West:
+            currentPosition.first -= 1;
+            break;
     }
+    setPosition(currentPosition);
+    addPath(currentPosition);
 }
 
 void Crawler::displayBug() {

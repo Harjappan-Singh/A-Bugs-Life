@@ -6,6 +6,7 @@
 #include "Hopper.h"
 #include "Crawler.h"
 #include "Bug.h"
+#include "Bishop.h"
 #include "Direction.h"
 #include "InputValidator.h"
 #include <iostream>
@@ -24,30 +25,34 @@ Board::Board() {
 //    }
 }
 
-void Board::initialiseBoard(const string& filename) {
+void Board::initialiseBoard(const string &filename) {
     ifstream file(filename);
-    if (!file.is_open()) {cout << "Error: File not found" << endl;
+    if (!file.is_open()) {
+        cout << "Error: File not found" << endl;
         return;
     }
-
     string line;
     while (getline(file, line)) {
         stringstream lineStream(line);
         vector<string> lineData;
-        string bugType, bugIdStr, bugXStr, bugYStr, directionStr, sizeStr, hopLengthStr;
+        string bugType, bugIdStr, bugXStr, bugYStr, directionStr, sizeStr, hopLengthStr, bishopLengthStr;
         getline(lineStream, bugType, ';');
         getline(lineStream, bugIdStr, ';');
         getline(lineStream, bugXStr, ';');
         getline(lineStream, bugYStr, ';');
         getline(lineStream, directionStr, ';');
         getline(lineStream, sizeStr, ';');
-        getline(lineStream, hopLengthStr, ';');
         if (bugType == "H") {
             getline(lineStream, hopLengthStr, ';');
         }
+        if (bugType == "B") {
+            getline(lineStream, bishopLengthStr, ';');
+        }
 
-        if (!isValidBugData(bugType, bugIdStr, bugXStr, bugYStr, directionStr, sizeStr, hopLengthStr)) {
-            cout << "Error: Invalid bug data" << endl;
+        int numOfInvalid = 1;
+        if (!isValidBugData(bugType, bugIdStr, bugXStr, bugYStr, directionStr, sizeStr, hopLengthStr, bishopLengthStr)){
+            cout << "Error: Invalid bug data -" << numOfInvalid << endl;
+            numOfInvalid++;
             continue;
         }
 
@@ -57,8 +62,12 @@ void Board::initialiseBoard(const string& filename) {
         int direction = stoi(directionStr);
         int size = stoi(sizeStr);
         int hopLength = 0;
-
-        if (bugType == "H") {
+        int bishopLength = 0;
+        if(bugType == "B"){
+            bishopLength = stoi(bishopLengthStr);
+            createBishopBug(bugId, bugX, bugY, direction, size, bishopLength);
+        }
+        else if (bugType == "H") {
             hopLength = stoi(hopLengthStr);
             createHopperBug(bugId, bugX, bugY, direction, size, hopLength);
         } else {
@@ -67,14 +76,16 @@ void Board::initialiseBoard(const string& filename) {
     }
 }
 
-bool Board::isValidBugData(const string& bugType, const string& bugIdStr, const string& bugXStr, const string& bugYStr, const string& directionStr, const string& sizeStr, const string& hopLengthStr) const {
+bool Board::isValidBugData(const string &bugType, const string &bugIdStr, const string &bugXStr,
+                           const string &bugYStr, const string &directionStr, const string &sizeStr,
+                           const string &hopLengthStr, const string &bishopLengthStr) const {
     int bugId = stoi(bugIdStr);
     int bugX = stoi(bugXStr);
     int bugY = stoi(bugYStr);
     int direction = stoi(directionStr);
     int size = stoi(sizeStr);
 
-    if (bugType != "C" && bugType != "H") {
+    if (bugType != "C" && bugType != "H" && bugType != "B") {
         return false;
     }
     if (bugId <= 0) {
@@ -86,7 +97,7 @@ bool Board::isValidBugData(const string& bugType, const string& bugIdStr, const 
     if (bugY < 0 || bugY >= BOARD_SIZE) {
         return false;
     }
-    if (direction < 1 || direction > 4) {
+    if (direction < 1 || direction > 8) {
         return false;
     }
     if (size <= 0) {
@@ -98,6 +109,12 @@ bool Board::isValidBugData(const string& bugType, const string& bugIdStr, const 
             return false;
         }
     }
+    if (bugType == "B") {
+        int bishopLength = stoi(bishopLengthStr);
+        if (bishopLength <= 0 || bishopLength > 6) {
+            return false;
+        }
+    }
     return true;
 }
 
@@ -106,6 +123,7 @@ void Board::createHopperBug(int bugId, int bugX, int bugY, int direction, int si
     hopper->addPath(make_pair(bugX, bugY));
     int position = (bugY * BOARD_SIZE) + bugX;
     cells[position].push_back(hopper);
+    bugs.push_back(hopper);
 }
 
 void Board::createCrawlerBug(int bugId, int bugX, int bugY, int direction, int size) {
@@ -113,6 +131,16 @@ void Board::createCrawlerBug(int bugId, int bugX, int bugY, int direction, int s
     crawler->addPath(make_pair(bugX, bugY));
     int position = (bugY * BOARD_SIZE) + bugX;
     cells[position].push_back(crawler);
+    bugs.push_back(crawler);
+}
+
+void Board::createBishopBug(int bugId, int bugX, int bugY, int direction, int size, int bishopLength) {
+    Bishop *bishop = new Bishop(bugId, make_pair(bugX, bugY), static_cast<Direction>(direction), size, true,
+                                bishopLength);
+    bishop->addPath(make_pair(bugX, bugY));
+    int position = (bugY * BOARD_SIZE) + bugX;
+    cells[position].push_back(bishop);
+    bugs.push_back(bishop);
 }
 
 void Board::displayAllBugs() const {
@@ -141,45 +169,46 @@ void Board::findBugById() const {
 }
 
 void Board::tapBoard() {
-    vector<Bug *> cellsCopy[100];
-    vector<Bug *> deadCells[100];
-    for (vector<Bug *> cell: cells) {
-        for (Bug *bug: cell) {
-            if (bug->isAlive()) {
-                bug->move();
-                cellsCopy[bug->getPosition().second * BOARD_SIZE + bug->getPosition().first].push_back(bug);
-            }else{
-                deadCells[bug->getPosition().second * BOARD_SIZE + bug->getPosition().first].push_back(bug);
-            }
-        }
+    if(countAliveBugs() == 1) {
+        Bug *lastBug = findLastAliveBug();
+        std::cout << "Last bug standing is bug " << lastBug->getId() << " at (" << lastBug->getPosition().first << "," << lastBug->getPosition().second << ")" << std::endl;
+        return;
     }
-
-    for (int i = 0; i < 100; i++) {
-        cells[i].clear();
-        copy(cellsCopy[i].begin(), cellsCopy[i].end(), back_inserter(cells[i]));
+    for (Bug *bug: bugs) {
+        if (bug->isAlive()) {
+            int oldPosition = bug->getPosition().second * BOARD_SIZE + bug->getPosition().first;
+            bug->move();
+            for (vector<Bug *>::iterator iter = cells[oldPosition].begin(); iter != cells[oldPosition].end(); ++iter) {
+                if (*iter == bug) {
+                    cells[oldPosition].erase(iter);
+                    break;
+                }
+            }
+            cells[bug->getPosition().second * BOARD_SIZE + bug->getPosition().first].push_back(bug);
+        }
     }
 
     for (vector<Bug *> cell: cells) {
         if (cell.size() > 1) {
-            Bug *biggestBug = cell[0];
+            Bug *biggestBug = nullptr;
             for (Bug *bug: cell) {
-                if (bug->getSize() > biggestBug->getSize()) {
-                    biggestBug = bug;
+                if (bug->isAlive()) {
+                    if (biggestBug == nullptr || bug->getSize() > biggestBug->getSize()) {
+                        biggestBug = bug;
+                    }
                 }
             }
-
-            for (Bug *bug: cell) {
-                if (bug != biggestBug) {
-                    bug->setAlive(false);
-                    bug->setEatenBy(biggestBug->getId());
-                    cout << bug->getId() << " eaten by " << biggestBug->getId() << endl;
-                    biggestBug->setSize(biggestBug->getSize() + bug->getSize());
+            if (biggestBug != nullptr) {
+                for (Bug *bug: cell) {
+                    if (bug->isAlive() && bug != biggestBug) {
+                        bug->setAlive(false);
+                        bug->setEatenBy(biggestBug->getId());
+                        cout << bug->getId() << " eaten by " << biggestBug->getId() << endl;
+                        biggestBug->setSize(biggestBug->getSize() + bug->getSize());
+                    }
                 }
             }
         }
-    }
-    for (int i = 0; i < 100; i++) {
-        copy(deadCells[i].begin(), deadCells[i].end(), back_inserter(cells[i]));
     }
 }
 
@@ -191,6 +220,8 @@ void Board::displayLifeHistoryOfAllBugs(ostream &out) const {
                 out << "Crawler";
             } else if (dynamic_cast<Hopper *>(bug)) {
                 out << "Hopper";
+            }else if (dynamic_cast<Bishop *>(bug)) {
+                out << "Bishop";
             }
             out << " Path: ";
             for (auto const &pos: bug->getPath()) {
@@ -240,6 +271,8 @@ void Board::displayAllCells() const {
                             cout << "Crawler " << bug->getId() << " ";
                         } else if (dynamic_cast<Hopper *>(bug)) {
                             cout << "Hopper " << bug->getId() << " ";
+                        }else if (dynamic_cast<Bishop *>(bug)) {
+                            cout << "Bishop " << bug->getId() << " ";
                         }
                     }
                 }

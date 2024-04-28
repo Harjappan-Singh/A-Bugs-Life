@@ -16,13 +16,15 @@ class Board{
 //    pair<int,int> cells[BOARD_SIZE][BOARD_SIZE];
 
     vector <Bug*> cells[100];
+    vector <Bug*> bugs;
 
 public:
     Board();
     void initialiseBoard(const string& filename);
-    bool isValidBugData(const string& bugType, const string& bugIdStr, const string& bugXStr, const string& bugYStr, const string& directionStr, const string& sizeStr, const string& hopLengthStr) const;
+    bool isValidBugData(const string& bugType, const string& bugIdStr, const string& bugXStr, const string& bugYStr, const string& directionStr, const string& sizeStr, const string& hopLengthStr, const string& bishopLengthStr) const;
     void createHopperBug(int bugId, int bugX, int bugY, int direction, int size, int hopLength);
     void createCrawlerBug(int bugId, int bugX, int bugY, int direction, int size);
+    void createBishopBug(int bugId, int bugX, int bugY, int direction, int size, int bisLength);
     void displayAllBugs() const;
     bool isBoardEmpty() const;
     void findBugById() const;

@@ -60,9 +60,6 @@ void Hopper::move() {
                 currentPosition.first -= hopLength;
                 break;
         }
-        setPosition(currentPosition);
-        currentPath.push_back(currentPosition);
-        addPath(currentPosition);
     }
     else {
         switch (currentDirection) {
@@ -79,10 +76,10 @@ void Hopper::move() {
                 currentPosition.first = 0;
                 break;
         }
-        setPosition(currentPosition);
-        currentPath.push_back(currentPosition);
-        addPath(currentPosition);
     }
+    setPosition(currentPosition);
+    currentPath.push_back(currentPosition);
+    addPath(currentPosition);
 }
 
 void Hopper::displayBug() {
