@@ -20,6 +20,7 @@ protected:
     int size;
     bool alive;
     list<pair<int,int>> path;
+    int predator;
 
 public:
     Bug();
@@ -50,7 +51,11 @@ public:
 
     void setPath(const list<pair<int, int>>& path);
 
-    void addPath(pair<int, int> position);
+    void addPath(const pair<int, int>& position);
+
+    int getPredator() const;
+
+    void setEatenBy(const int& predator);
 
     virtual void move() = 0;
 

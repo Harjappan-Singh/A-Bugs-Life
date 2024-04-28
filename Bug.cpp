@@ -68,8 +68,16 @@ const list<pair<int, int>> & Bug::getPath() const {
 void Bug::setPath(const list<pair<int, int>> &p) {
     Bug::path = p;
 }
-void Bug::addPath(pair<int, int> position) {
+void Bug::addPath(const pair<int, int>& position) {
     path.push_back(position);
+}
+
+int Bug::getPredator() const {
+    return predator;
+}
+
+void Bug::setEatenBy(const int& p) {
+    Bug::predator = p;
 }
 
 bool Bug::isWayBlocked() const{

@@ -16,12 +16,7 @@ int main() {
         int choice = InputValidator::readInt("Please enter your choice: ");
         switch(choice){
             case 1:
-                cout << "Displaying all the bugs on the board" << endl;
-                if(board.isBoardEmpty()){
-                    cout << "There are no bugs on the board" << endl;
-                } else {
-                    board.displayAllBugs();
-                }
+                board.displayAllBugs();
                 break;
             case 2:
                 cout << "Finding a bug by id" << endl;
@@ -43,6 +38,10 @@ int main() {
                 cout << "Displaying all cells" << endl;
                 board.displayAllCells();
                 break;
+            case 7:
+                cout << "Running simulation" << endl;
+                board.simulate();
+                return 0;
             default:
                 cout << "Invalid choice, please enter a number between 1 and 6" << endl;
                 break;
@@ -61,4 +60,5 @@ void printMenu() {
     cout << "4. Display the life history of all the bugs" << endl;
     cout << "5. Exit" << endl;
     cout << "6. Display all cells" << endl;
+    cout << "7. Run simulation" << endl;
 }

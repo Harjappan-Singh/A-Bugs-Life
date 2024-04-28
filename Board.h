@@ -30,6 +30,10 @@ public:
     void displayLifeHistoryOfAllBugs(ostream& out = cout) const;
     void writeLifeHistoryOfAllBugsToFile() const;
     void displayAllCells() const;
+    void fight(vector<Bug*> &vector_bug);
+    int countAliveBugs() const;
+    Bug* findLastAliveBug() const;
+    void simulate();
     ~Board();
 };
 

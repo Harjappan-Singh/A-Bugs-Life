@@ -13,10 +13,11 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <thread>
 using namespace std;
 
 Board::Board() {
-//    for (int i = 0; i < BOARD_SIZE; i++) {
+//    for (int i = 0; i <s BOARD_SIZE; i++) {
 //        for (int j = 0; j < BOARD_SIZE; j++) {
 //            cells[i][j] = make_pair(i,j);
 //        }
@@ -140,10 +141,45 @@ void Board::findBugById() const {
 }
 
 void Board::tapBoard() {
-    for (int i = 0; i < 100; i++) {
-        for (Bug *bug: cells[i]) {
-            bug->move();
+    vector<Bug *> cellsCopy[100];
+    vector<Bug *> deadCells[100];
+    for (vector<Bug *> cell: cells) {
+        for (Bug *bug: cell) {
+            if (bug->isAlive()) {
+                bug->move();
+                cellsCopy[bug->getPosition().second * BOARD_SIZE + bug->getPosition().first].push_back(bug);
+            }else{
+                deadCells[bug->getPosition().second * BOARD_SIZE + bug->getPosition().first].push_back(bug);
+            }
         }
+    }
+
+    for (int i = 0; i < 100; i++) {
+        cells[i].clear();
+        copy(cellsCopy[i].begin(), cellsCopy[i].end(), back_inserter(cells[i]));
+    }
+
+    for (vector<Bug *> cell: cells) {
+        if (cell.size() > 1) {
+            Bug *biggestBug = cell[0];
+            for (Bug *bug: cell) {
+                if (bug->getSize() > biggestBug->getSize()) {
+                    biggestBug = bug;
+                }
+            }
+
+            for (Bug *bug: cell) {
+                if (bug != biggestBug) {
+                    bug->setAlive(false);
+                    bug->setEatenBy(biggestBug->getId());
+                    cout << bug->getId() << " eaten by " << biggestBug->getId() << endl;
+                    biggestBug->setSize(biggestBug->getSize() + bug->getSize());
+                }
+            }
+        }
+    }
+    for (int i = 0; i < 100; i++) {
+        copy(deadCells[i].begin(), deadCells[i].end(), back_inserter(cells[i]));
     }
 }
 
@@ -162,6 +198,9 @@ void Board::displayLifeHistoryOfAllBugs(ostream &out) const {
                 if (&pos != &bug->getPath().back()) {
                     out << ",";
                 }
+            }
+            if (!bug->isAlive()) {
+                out << " Eaten by " << bug->getPredator();
             }
             out << endl;
         }
@@ -189,28 +228,71 @@ void Board::writeLifeHistoryOfAllBugsToFile() const {
 }
 
 void Board::displayAllCells() const {
-    for(int i = 0; i < BOARD_SIZE; i++){
-        for(int j = 0; j < BOARD_SIZE; j++){
-            int check = j * BOARD_SIZE + i;
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
             cout << "(" << i << "," << j << "): ";
-            if(cells[check].empty()){
-                cout << "empty" << endl;
-            } else {
-                for (Bug *bug: cells[check]) {
-                    if (dynamic_cast<Crawler *>(bug)) {
-                        cout << "Crawler " << bug->getId() << " ";
-                    } else if (dynamic_cast<Hopper *>(bug)) {
-                        cout << "Hopper " << bug->getId() << " ";
+            bool empty = true;
+            for (const auto &cell: cells) {
+                for (Bug *bug: cell) {
+                    if (bug->getPosition() == make_pair(i, j) && bug->isAlive()) {
+                        empty = false;
+                        if (dynamic_cast<Crawler *>(bug)) {
+                            cout << "Crawler " << bug->getId() << " ";
+                        } else if (dynamic_cast<Hopper *>(bug)) {
+                            cout << "Hopper " << bug->getId() << " ";
+                        }
                     }
                 }
+            }
+            if (empty) {
+                cout << "empty" << endl;
+            } else {
                 cout << endl;
             }
         }
     }
 }
 
+void Board::simulate() {
+    int numBugs = countAliveBugs();
+    int round = 1;
+    while (numBugs > 1) {
+        cout << "Round " << round << ":" << endl;
+        tapBoard();
+        displayAllBugs();
+        numBugs = countAliveBugs();
+        round++;
+        this_thread::sleep_for(chrono::seconds(1));
+    }
+    cout << "Bug " << findLastAliveBug()->getId() << " is the survivor." << endl;
+    writeLifeHistoryOfAllBugsToFile();
+}
+
+int Board::countAliveBugs() const {
+    int count = 0;
+    for (int i = 0; i < 100; i++) {
+        for (Bug *bug: cells[i]) {
+            if (bug->isAlive()) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+Bug* Board::findLastAliveBug() const {
+    for (int i = 0; i < 100; i++) {
+        for (Bug *bug: cells[i]) {
+            if (bug->isAlive()) {
+                return bug;
+            }
+        }
+    }
+    return nullptr;
+}
+
 Board::~Board() {
-    for (int i = 0; i < 99; i++) {
+    for (int i = 0; i <= 99; i++) {
         for (vector<Bug *>::iterator it = cells[i].begin(); it != cells[i].end(); ++it) {
             delete *it;
             cout << "deleting bug" << endl;
