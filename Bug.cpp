@@ -68,6 +68,9 @@ const list<pair<int, int>> & Bug::getPath() const {
 void Bug::setPath(const list<pair<int, int>> &p) {
     Bug::path = p;
 }
+void Bug::addPath(pair<int, int> position) {
+    path.push_back(position);
+}
 
 bool Bug::isWayBlocked() const{
     const int BOARD_SIZE = 10;

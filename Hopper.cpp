@@ -62,7 +62,7 @@ void Hopper::move() {
         }
         setPosition(currentPosition);
         currentPath.push_back(currentPosition);
-        setPath(currentPath);
+        addPath(currentPosition);
     }
     else {
         switch (currentDirection) {
@@ -81,12 +81,32 @@ void Hopper::move() {
         }
         setPosition(currentPosition);
         currentPath.push_back(currentPosition);
-        setPath(currentPath);
+        addPath(currentPosition);
     }
 }
 
 void Hopper::displayBug() {
-    std::cout << "Hopper " << getId() << " at (" << getPosition().first << "," << getPosition().second << ") facing " << getDirection() << " with hop length " << hopLength << "alive? " << isAlive() << " and size " << getSize() << std::endl;
+    cout << getId() << " Hopper (" << getPosition().first << "," << getPosition().second << ") " << getSize() << " ";
+    switch (getDirection()) {
+        case North:
+            cout << "North ";
+            break;
+        case East:
+            cout << "East ";
+            break;
+        case South:
+            cout << "South ";
+            break;
+        case West:
+            cout << "West ";
+            break;
+    }
+    cout << hopLength << " ";
+    if (isAlive()) {
+        cout << "Alive" << endl;
+    } else {
+        cout << "Dead" << endl;
+    }
 }
 
 Hopper::~Hopper() {

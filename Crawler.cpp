@@ -6,7 +6,6 @@
 #include "Crawler.h"
 
 Crawler::Crawler() : Bug() {
-
 }
 
 Crawler::Crawler(int id, pair<int, int> position, Direction direction, int size, bool alive) : Bug(id, position, direction, size, alive) {
@@ -16,7 +15,7 @@ Crawler::Crawler(int id, pair<int, int> position, Direction direction, int size,
 void Crawler::move(){
     pair<int, int> currentPosition = getPosition();
     Direction currentDirection = getDirection();
-    list<std::pair<int, int>> currentPath = getPath();
+    list<pair<int, int>> currentPath = getPath();
 
     if (!isWayBlocked()) {
         switch (currentDirection) {
@@ -34,8 +33,7 @@ void Crawler::move(){
                 break;
         }
         setPosition(currentPosition);
-        currentPath.push_back(currentPosition);
-        setPath(currentPath);
+        addPath(currentPosition);
     } else {
         int newDirection = rand() % 4 + 1;
         setDirection((Direction) newDirection);
@@ -44,7 +42,26 @@ void Crawler::move(){
 }
 
 void Crawler::displayBug() {
-    std::cout << "Crawler " << getId() << " at (" << getPosition().first << "," << getPosition().second << ") facing " << getDirection() << " size " << getSize() << " alive " << isAlive() << std::endl;
+    cout << getId() << " Crawler (" << getPosition().first << "," << getPosition().second << ") " << getSize() << " ";
+    switch (getDirection()) {
+        case North:
+            cout << "North ";
+            break;
+        case South:
+            cout << "South ";
+            break;
+        case East:
+            cout << "East ";
+            break;
+        case West:
+            cout << "West ";
+            break;
+    }
+    if (isAlive()) {
+        cout << "Alive" << endl;
+    } else {
+        cout << "Dead" << endl;
+    }
 }
 
 Crawler::~Crawler() {

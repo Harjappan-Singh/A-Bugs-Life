@@ -10,7 +10,6 @@ void printMenu();
 
 int main() {
     Board board;
-    string filename = InputValidator::readString("Enter the name of the file to read the bug data from: ");
     board.initialiseBoard("/Users/harjappansingh/Documents/College/Sophomore/Sem 2/C++/Bug_Life_Project/bugs.txt");
     while(true){
         printMenu();
@@ -18,7 +17,7 @@ int main() {
         switch(choice){
             case 1:
                 cout << "Displaying all the bugs on the board" << endl;
-                if(board.isBugVectorEmpty()){
+                if(board.isBoardEmpty()){
                     cout << "There are no bugs on the board" << endl;
                 } else {
                     board.displayAllBugs();
@@ -42,6 +41,7 @@ int main() {
                 return 0;
             case 6:
                 cout << "Displaying all cells" << endl;
+                board.displayAllCells();
                 break;
             default:
                 cout << "Invalid choice, please enter a number between 1 and 6" << endl;

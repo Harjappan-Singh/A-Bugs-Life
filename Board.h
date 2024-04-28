@@ -11,9 +11,11 @@
 class Board{
     static const int BOARD_SIZE = 10;
 
-    vector<Bug*> bug_vector;
+//    vector<Bug*> bug_vector;
+//
+//    pair<int,int> cells[BOARD_SIZE][BOARD_SIZE];
 
-    pair<int,int> cells[BOARD_SIZE][BOARD_SIZE];
+    vector <Bug*> cells[100];
 
 public:
     Board();
@@ -22,11 +24,12 @@ public:
     void createHopperBug(int bugId, int bugX, int bugY, int direction, int size, int hopLength);
     void createCrawlerBug(int bugId, int bugX, int bugY, int direction, int size);
     void displayAllBugs() const;
-    bool isBugVectorEmpty() const;
+    bool isBoardEmpty() const;
     void findBugById() const;
     void tapBoard();
     void displayLifeHistoryOfAllBugs(ostream& out = cout) const;
     void writeLifeHistoryOfAllBugsToFile() const;
+    void displayAllCells() const;
     ~Board();
 };
 

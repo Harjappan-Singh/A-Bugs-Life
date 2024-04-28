@@ -50,6 +50,8 @@ public:
 
     void setPath(const list<pair<int, int>>& path);
 
+    void addPath(pair<int, int> position);
+
     virtual void move() = 0;
 
     bool isWayBlocked() const;

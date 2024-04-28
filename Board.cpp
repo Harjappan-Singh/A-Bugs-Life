@@ -16,11 +16,11 @@
 using namespace std;
 
 Board::Board() {
-    for (int i = 0; i < BOARD_SIZE; i++) {
-        for (int j = 0; j < BOARD_SIZE; j++) {
-            cells[i][j] = make_pair(i,j);
-        }
-    }
+//    for (int i = 0; i < BOARD_SIZE; i++) {
+//        for (int j = 0; j < BOARD_SIZE; j++) {
+//            cells[i][j] = make_pair(i,j);
+//        }
+//    }
 }
 
 void Board::initialiseBoard(const string& filename) {
@@ -102,98 +102,74 @@ bool Board::isValidBugData(const string& bugType, const string& bugIdStr, const 
 
 void Board::createHopperBug(int bugId, int bugX, int bugY, int direction, int size, int hopLength) {
     Hopper* hopper = new Hopper(bugId, make_pair(bugX, bugY), static_cast<Direction>(direction), size, true, hopLength);
-    bug_vector.push_back(hopper);
+    hopper->addPath(make_pair(bugX, bugY));
+    int position = (bugY * BOARD_SIZE) + bugX;
+    cells[position].push_back(hopper);
 }
 
 void Board::createCrawlerBug(int bugId, int bugX, int bugY, int direction, int size) {
     Crawler* crawler = new Crawler(bugId, make_pair(bugX, bugY), static_cast<Direction>(direction), size, true);
-    bug_vector.push_back(crawler);
+    crawler->addPath(make_pair(bugX, bugY));
+    int position = (bugY * BOARD_SIZE) + bugX;
+    cells[position].push_back(crawler);
 }
 
 void Board::displayAllBugs() const {
-    for (const auto& bug : bug_vector) {
-        cout << bug->getId() << " ";
-        if (dynamic_cast<Crawler*>(bug)) {
-            cout << "Crawler ";
-        } else {
-            cout << "Hopper ";
+    for (int i = 0; i < 100; i++) {
+        for (vector<Bug *>::const_iterator it = cells[i].cbegin(); it != cells[i].cend(); ++it) {
+            (*it)->displayBug();
         }
-        cout << "(" << bug->getPosition().first << "," << bug->getPosition().second << ") ";
-        cout << bug->getSize() << " ";
-
-        switch (bug->getDirection()) {
-            case Direction::North:
-                cout << "North ";
-                break;
-            case Direction::East:
-                cout << "East ";
-                break;
-            case Direction::South:
-                cout << "South ";
-                break;
-            case Direction::West:
-                cout << "West ";
-                break;
-        }
-
-        if (dynamic_cast<Hopper*>(bug)) {
-            cout << dynamic_cast<Hopper*>(bug)->getHopLength() << " ";
-        } else {
-            cout << "- ";
-        }
-
-        if (bug->isAlive()) {
-            cout << "Alive";
-        } else {
-            cout << "Dead";
-        }
-
-        cout << endl;
     }
 }
 
-bool Board::isBugVectorEmpty() const{
-    return bug_vector.empty();
+bool Board::isBoardEmpty() const {
+    return cells->empty();
 }
 
 void Board::findBugById() const {
     int bugId = InputValidator::readInt("Enter bug id: ");
-    for (Bug* bug : bug_vector) {
-        if (bug->getId() == bugId) {
-            bug->displayBug();
-            return;
+    for (int i = 0; i < 100; i++) {
+        for (vector<Bug *>::const_iterator it = cells[i].cbegin(); it != cells[i].cend(); ++it) {
+            if ((*it)->getId() == bugId) {
+                (*it)->displayBug();
+                return;
+            }
         }
     }
     cout << "Bug " << bugId << " not found" << endl;
 }
 
 void Board::tapBoard() {
-    for (Bug* bug : bug_vector) {
-        bug->move();
+    for (int i = 0; i < 100; i++) {
+        for (Bug *bug: cells[i]) {
+            bug->move();
+        }
     }
 }
 
-void Board::displayLifeHistoryOfAllBugs(ostream& out) const {
-    for (Bug* bug : bug_vector) {
-        out << bug->getId() << " ";
-        if (dynamic_cast<Crawler*>(bug)) {
-            out << "Crawler";
-        } else if (dynamic_cast<Hopper*>(bug)) {
-            out << "Hopper";
-        }
-        out << " Path: ";
-        for (auto const& pos : bug->getPath()) {
-            out << "(" << pos.first << "," << pos.second << ")";
-            if (&pos != &bug->getPath().back()) {
-                out << ",";
+void Board::displayLifeHistoryOfAllBugs(ostream &out) const {
+    for (int i = 0; i < 100; i++) {
+        for (Bug *bug: cells[i]) {
+            out << bug->getId() << " ";
+            if (dynamic_cast<Crawler *>(bug)) {
+                out << "Crawler";
+            } else if (dynamic_cast<Hopper *>(bug)) {
+                out << "Hopper";
             }
+            out << " Path: ";
+            for (auto const &pos: bug->getPath()) {
+                out << "(" << pos.first << "," << pos.second << ")";
+                if (&pos != &bug->getPath().back()) {
+                    out << ",";
+                }
+            }
+            out << endl;
         }
-        out << endl;
     }
 }
 
 void Board::writeLifeHistoryOfAllBugsToFile() const {
-    filesystem::path dir_path = "/Users/harjappansingh/Documents/College/Sophomore/Sem 2/C++/Bug_Life_Project/";
+    filesystem::path dir_path = filesystem::current_path().parent_path();
 
     string file_name = "bugs_life_history_" + InputValidator::getCurrentDateTime() + ".out";
     replace(file_name.begin(), file_name.end(), ':', '_');
@@ -208,12 +184,36 @@ void Board::writeLifeHistoryOfAllBugsToFile() const {
     if (!file.good()) {
         throw runtime_error("Error writing to file.");
     }
-
+    cout << "Life history of all bugs written to file: " << file_path << endl;
     file.close();
 }
 
+void Board::displayAllCells() const {
+    for(int i = 0; i < BOARD_SIZE; i++){
+        for(int j = 0; j < BOARD_SIZE; j++){
+            int check = j * BOARD_SIZE + i;
+            cout << "(" << i << "," << j << "): ";
+            if(cells[check].empty()){
+                cout << "empty" << endl;
+            } else {
+                for (Bug *bug: cells[check]) {
+                    if (dynamic_cast<Crawler *>(bug)) {
+                        cout << "Crawler " << bug->getId() << " ";
+                    } else if (dynamic_cast<Hopper *>(bug)) {
+                        cout << "Hopper " << bug->getId() << " ";
+                    }
+                }
+                cout << endl;
+            }
+        }
+    }
+}
+
 Board::~Board() {
-    for (auto & i : bug_vector) {
-        delete i;
+    for (int i = 0; i < 99; i++) {
+        for (vector<Bug *>::iterator it = cells[i].begin(); it != cells[i].end(); ++it) {
+            delete *it;
+            cout << "deleting bug" << endl;
+        }
     }
 }
